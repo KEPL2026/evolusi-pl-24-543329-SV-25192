@@ -326,10 +326,40 @@
 
     <!-- Table Buku -->
     <div class="card">
-        <div class="card-title">Daftar Buku Referensi ({{ $books->count() }})</div>
+        <div class="card-title">
+            <span>Daftar Buku Referensi ({{ $books->count() }})</span>
+        </div>
+
+        <!-- Filter & Pencarian -->
+        <form method="GET" action="{{ route('books.index') }}" style="margin-bottom: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+            <div style="flex: 1; min-width: 200px;">
+                <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Cari judul atau penulis...">
+            </div>
+            <div style="width: 220px;">
+                <select name="kategori">
+                    <option value="">-- Semua Kategori --</option>
+                    @foreach ($categories as $cat)
+                        <option value="{{ $cat }}" {{ ($kategori ?? '') === $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="padding: 0.6rem 1rem;">Filter</button>
+            @if (!empty($search) || !empty($kategori))
+                <a href="{{ route('books.index') }}" class="btn btn-outline" style="padding: 0.6rem 1rem; text-decoration: none;">Reset</a>
+            @endif
+        </form>
+
+        @if (!empty($search) || !empty($kategori))
+            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+                Menampilkan hasil filter
+                @if (!empty($search)) untuk kata kunci "<strong>{{ $search }}</strong>"@endif
+                @if (!empty($kategori)) pada kategori "<strong>{{ $kategori }}</strong>"@endif
+            </div>
+        @endif
+
         @if ($books->isEmpty())
             <div class="empty-state">
-                <p>Belum ada buku dalam katalog. Silakan tambahkan buku baru melalui formulir di atas.</p>
+                <p>Tidak ada buku yang sesuai dengan filter atau pencarian Anda.</p>
             </div>
         @else
             <table>

@@ -15,13 +15,21 @@ class BookController extends Controller
     /**
      * Menampilkan daftar buku dan statistik katalog.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $books = Book::latest()->get();
+        $search = $request->query('search');
+        $kategori = $request->query('kategori');
+
+        $books = Book::query()
+            ->search($search)
+            ->category($kategori)
+            ->latest()
+            ->get();
+
         $categories = $this->catalogService->getDefaultCategories();
         $stats = $this->catalogService->getStatistics();
 
-        return view('books.index', compact('books', 'categories', 'stats'));
+        return view('books.index', compact('books', 'categories', 'stats', 'search', 'kategori'));
     }
 
     /**
