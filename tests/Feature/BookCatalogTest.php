@@ -109,4 +109,50 @@ class BookCatalogTest extends TestCase
             'peminjam' => null,
         ]);
     }
+
+    public function test_user_can_search_books_by_title_or_author(): void
+    {
+        Book::create([
+            'judul' => 'Sistem Basis Data Lanjut',
+            'penulis' => 'Fathansyah',
+            'tahun' => 2020,
+            'kategori' => 'Basis Data',
+        ]);
+
+        Book::create([
+            'judul' => 'Arsitektur Komputer Modern',
+            'penulis' => 'Andrew S. Tanenbaum',
+            'tahun' => 2016,
+            'kategori' => 'Jaringan & Keamanan',
+        ]);
+
+        $response = $this->get('/?search=Fathansyah');
+
+        $response->assertStatus(200);
+        $response->assertSee('Sistem Basis Data Lanjut');
+        $response->assertDontSee('Arsitektur Komputer Modern');
+    }
+
+    public function test_user_can_filter_books_by_category(): void
+    {
+        Book::create([
+            'judul' => 'Deep Learning with Python',
+            'penulis' => 'Francois Chollet',
+            'tahun' => 2021,
+            'kategori' => 'Kecerdasan Buatan',
+        ]);
+
+        Book::create([
+            'judul' => 'Struktur Data C++',
+            'penulis' => 'Adam Drozdek',
+            'tahun' => 2012,
+            'kategori' => 'Struktur Data & Algoritma',
+        ]);
+
+        $response = $this->get('/?kategori=Kecerdasan+Buatan');
+
+        $response->assertStatus(200);
+        $response->assertSee('Deep Learning with Python');
+        $response->assertDontSee('Struktur Data C++');
+    }
 }

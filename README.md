@@ -1,59 +1,122 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# evolusi-pl-24-543329-SV-25192
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Repository pengumpulan tugas mata kuliah **Konstruksi &amp; Evolusi Perangkat Lunak** (Pertemuan 1: *Manajemen GitHub &amp; Prinsip CI*), Departemen Teknik Elektro dan Informatika, Sekolah Vokasi, Universitas Gadjah Mada (2026).
 
-## About Laravel
+- **Nama**: Ahsani Fadhli Ilahi
+- **NIM**: 24/543329/SV/25192
+- **Program Studi**: Sarjana Terapan Pengembangan Perangkat Lunak Situs (PPLS) / Rekayasa Perangkat Lunak
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📚 Deskripsi Aplikasi: Katalog Buku &amp; Referensi Kuliah
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Aplikasi **Katalog Buku &amp; Referensi Kuliah** merupakan sistem manajemen inventaris dan sirkulasi buku referensi perkuliahan berbasis framework **Laravel 12**. Aplikasi ini mempermudah mahasiswa dan dosen dalam mendata buku teks, memeriksa ketersediaan koleksi, melakukan peminjaman buku, serta mengembalikan buku ke inventaris perpustakaan/lab.
 
-## Learning Laravel
+### Struktur Modul Utama
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+| Berkas | Isi &amp; Tanggung Jawab |
+|---|---|
+| `app/Models/Book.php` | Model Eloquent dengan atribut buku, status (`tersedia`/`dipinjam`), dan logika peminjaman |
+| `app/Services/BookCatalogService.php` | Logika bisnis kalkulasi ringkasan statistik dan daftar kategori referensi |
+| `app/Http/Controllers/BookController.php` | Pengendali request HTTP untuk melihat daftar, menambah buku, meminjam, dan mengembalikan |
+| `resources/views/books/index.blade.php` | Tampilan antarmuka berbasis Blade dengan kartu statistik dan desain responsif |
+| `routes/web.php` | Definisi rute GET `/`, POST `/books`, POST `/books/{id}/borrow`, POST `/books/{id}/return` |
+| `tests/Unit/BookCatalogServiceTest.php` | Pengujian unit mandiri untuk metode service dan helper model |
+| `tests/Feature/BookCatalogTest.php` | Pengujian fitur endpoint HTTP, form submission, transaksi peminjaman, dan validasi |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## 🚀 Panduan Menjalankan Aplikasi &amp; Pengujian
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Prasyarat Sistem
+- PHP 8.2 atau lebih tinggi (ekstensi `sqlite3`, `mbstring`, `xml`, `zip` aktif)
+- Composer 2.x
 
-### Premium Partners
+### Menjalankan Pengujian Otomatis
+```bash
+# Validasi sintaks berkas konfigurasi Composer
+composer validate
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+# Menjalankan seluruh test suite otomatis (Unit & Feature Tests)
+php artisan test
+```
 
-## Contributing
+### Menjalankan Server Pengembangan Lokal
+```bash
+# 1. Salin berkas lingkungan dan generate application key
+cp .env.example .env
+php artisan key:generate
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# 2. Siapkan basis data SQLite dan jalankan migrasi
+touch database/database.sqlite
+php artisan migrate
 
-## Code of Conduct
+# 3. Jalankan server lokal
+php artisan serve
+```
+Akses aplikasi melalui peramban pada alamat `http://localhost:8000`.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🌿 Alur Percabangan (Git Branching Strategy)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Kode **tidak pernah** di-push langsung ke branch `main`. Seluruh pengembangan fitur baru dan integrasi mengikuti alur bertingkat berikut:
 
-## License
+```
+feature/<nama-fitur>  --PR 1-->  dev  --PR 2-->  main
+     (pengembangan)            (integrasi)      (rilis / dinilai)
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+| Branch | Peran | Izin Push Langsung |
+|---|---|---|
+| `feature/<nama-fitur>` | Tempat pengerjaan fitur spesifik dengan rentang waktu singkat | Diizinkan |
+| `dev` | Wadah integrasi seluruh fitur sebelum rilis resmi | Dilarang — Wajib melalui PR dari `feature/*` |
+| `main` | Kondisi stabil, siap rilis, dan siap dinilai | Dilarang — Wajib melalui PR dari `dev` |
+
+Branch default repository ini diatur ke `dev`, sehingga Pull Request baru secara otomatis menargetkan branch `dev`.
+
+---
+
+## ⚙️ Alur Continuous Integration (CI)
+
+Berkas alur kerja GitHub Actions terletak pada [`.github/workflows/ci.yml`](.github/workflows/ci.yml) yang memuat **dua job paralel** pada setiap `push` dan `pull_request` ke branch `dev` maupun `main`:
+
+1. **`lint` (Lint &amp; Sintaks)**:
+   - Menyiapkan environment PHP 8.2.
+   - Menjalankan `composer validate --strict` untuk memastikan dependensi dan lockfile valid.
+   - Memeriksa integritas seluruh berkas sintaks PHP (`php -l`).
+2. **`test` (Pengujian Unit &amp; Fitur)**:
+   - Menyiapkan environment PHP 8.2 dengan ekstensi SQLite.
+   - Memasang seluruh dependensi menggunakan Composer.
+   - Menginisialisasi basis data SQLite dan menjalankan migrasi.
+   - Menjalankan seluruh skenario pengujian otomatis (`php artisan test`).
+
+Kedua job wajib berstatus **sukses (hijau)** sebelum Pull Request dapat digabungkan (*merge*).
+
+---
+
+## 📝 Konvensi Pesan Commit (Conventional Commits)
+
+Format commit mengacu pada standar [Conventional Commits](https://www.conventionalcommits.org/):
+
+```
+feat:     menambahkan fitur baru ke aplikasi
+fix:      memperbaiki bug atau kegagalan logika
+test:     menambah atau memperbarui pengujian otomatis
+ci:       perubahan pada berkas/konfigurasi alur kerja CI
+docs:     penambahan atau pembaruan dokumentasi
+chore:    tugas pemeliharaan rutin, konfigurasi, atau struktur dasar
+refactor: penataan ulang struktur kode tanpa mengubah fungsi luar
+```
+
+---
+
+## ✅ Checklist Pemenuhan Tugas (Pertemuan 1)
+
+- [x] Repository publik di organisasi KEPL2026: `evolusi-pl-24-543329-SV-25192`
+- [x] Minimal 5 commit bergaya Conventional Commits (tanpa commit 'update' polos)
+- [x] Branch `feature/<sesuatu>` dengan satu perubahan nyata
+- [x] Dua Pull Request bertingkat: `feature/*` &rarr; `dev`, lalu `dev` &rarr; `main`
+- [x] Berkas [`.github/workflows/ci.yml`](.github/workflows/ci.yml) dengan minimal 2 job berstatus hijau
+- [x] Branch protection rule pada branch `dev` dan `main` serta kolaborator dosen (peran Read)
+- [x] Berkas `README.md` dan `.gitignore` lengkap dan rapi

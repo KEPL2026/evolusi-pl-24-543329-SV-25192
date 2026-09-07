@@ -47,4 +47,29 @@ class Book extends Model
             'peminjam' => null,
         ]);
     }
+
+    /**
+     * Scope untuk pencarian berdasarkan judul atau penulis.
+     */
+    public function scopeSearch($query, ?string $keyword)
+    {
+        if (! empty($keyword)) {
+            $query->where(function ($q) use ($keyword) {
+                $q->where('judul', 'like', "%{$keyword}%")
+                  ->orWhere('penulis', 'like', "%{$keyword}%");
+            });
+        }
+        return $query;
+    }
+
+    /**
+     * Scope untuk filter berdasarkan kategori buku.
+     */
+    public function scopeCategory($query, ?string $category)
+    {
+        if (! empty($category)) {
+            $query->where('kategori', $category);
+        }
+        return $query;
+    }
 }
